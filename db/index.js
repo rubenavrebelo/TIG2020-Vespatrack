@@ -11,12 +11,14 @@ const pool = new Pool({
 module.exports = {
   query: (text, params) => pool.query(text, params),
   insert: (query) => pool.query(query),
-  insertWithReturn: (query, callback) =>
+  insertWithReturn: (query, callback, type) =>
     pool.query(query, function (err, result) {
       if (err) {
         callback(err);
       } else {
-        callback(null, result.rows[0].vespaid);
+        console.log(result.rows[0]);
+        if (type === "Vespa") callback(null, result.rows[0].vespaid);
+        else callback(null, result.rows[0].nestid);
       }
     }),
 };

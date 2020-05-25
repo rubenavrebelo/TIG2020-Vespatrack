@@ -12,6 +12,10 @@ var app = express();
 
 var geojson = JSON.parse(fs.readFileSync("./public/concelhos.geojson", "utf8"));
 
+const queryYear =
+  "SELECT * FROM avistamentos WHERE EXTRACT(year FROM date) = ($1)";
+
+const updateStates = `UPDATE ninhos SET past_states = array_append(past_states, 'teste') WHERE nestid=1;`;
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/uploads");
@@ -33,27 +37,53 @@ app.get("/", async (req, res) => {
   res.send(result.rows);
 });
 
-app.get("/concelhos", async (req, res) => {
-  res.send(geojson);
+app.get("/vespas", async (req, res) => {
+  const result = await db.query("SELECT * FROM vespas;");
+  res.send(result.rows);
 });
 
-app.get("/infodetails/:id", async (req, res) => {
-  const detailQuery =
-    "Select * FROM avistamentos LEFT JOIN vespas ON avistamentos.specific_id=vespas.vespaid WHERE avistamentos.id=($1)";
+app.get("/ninhos", async (req, res) => {
+  const result = await db.query("SELECT * FROM ninhos;");
+  res.send(result.rows);
+});
+
+app.get("/:id", async (req, res) => {
+  if (req.params.id === "concelhos") {
+    res.send(geojson);
+  } else {
+    const result = await db.query(
+      `SELECT * FROM avistamentos WHERE id=${req.params.id};`
+    );
+    res.send(result.rows[0]);
+  }
+});
+
+app.get("/concelhos", async (req, res) => {});
+
+app.get("/infodetails/:type/:id", async (req, res) => {
+  const { type } = req.params;
+  const detailQuery = `Select * FROM avistamentos LEFT JOIN ${req.params.type.toLowerCase()} ON avistamentos.${
+    type === "vespas" ? "specific_id" : "nest_specific_id"
+  }=${type.toLowerCase()}.${
+    type === "vespas" ? "vespaid" : "nestid"
+  } WHERE avistamentos.id=($1)`;
   const result = await db.query({ text: detailQuery, values: [req.params.id] });
   result.rows[0].past_states = postgresArray.parse(result.rows[0].past_states);
   res.send(result.rows[0]);
 });
 
-function insertViewing(file, values, id) {
+function insertViewing(file, values, id, type) {
   if (file) values.push(file.originalname);
   values.push(id);
   const queryViewing = {
-    text: `INSERT INTO public.avistamentos (type, state, local, date, lat, lng, localType, specific_id${
-      file ? ",photo)" : ")"
-    } VALUES ($1, $2, $3, $4, $5, $6, $7, $8${file ? ",$9)" : ")"}`,
+    text: `INSERT INTO public.avistamentos (type, state, local, date, lat, lng, localType${
+      file ? ",photo" : ","
+    } ${
+      type === "Vespa" ? "specific_id" : "nest_specific_id"
+    }) VALUES ($1, $2, $3, $4, $5, $6, $7, $8${file ? ",$9)" : ")"}`,
     values,
   };
+  console.log(id);
   db.insert(queryViewing);
 }
 
@@ -63,39 +93,79 @@ app.post("/add", upload.single("photo"), (req, res) => {
   let table;
   let columns;
   let valuesQuery;
+  let query;
   if (json.type === "Vespa") {
     table = "vespas";
     columns = "(state_hornet, past_states, confirmed_asian)";
     valuesQuery = "($1, $2, $3)";
+    query = {
+      text: `INSERT INTO public.${table} ${columns} VALUES ${valuesQuery} RETURNING vespaid`,
+      values: ["Não verificada", [], false],
+    };
+  } else {
+    table = "ninhos";
+    columns = "(colony, destroyed, state_nest, past_states)";
+    valuesQuery = "($1, $2, $3, $4)";
+    query = {
+      text: `INSERT INTO public.${table} ${columns} VALUES ${valuesQuery} RETURNING nestid`,
+      values: [false, false, "Não verificado", []],
+    };
   }
 
-  const queryHornet = {
-    text: `INSERT INTO public.${table} ${columns} VALUES ${valuesQuery} RETURNING vespaid`,
-    values: ["Não verificada", [], false],
-  };
-
-  db.insertWithReturn(queryHornet, function (err, res) {
-    insertViewing(req.file, values, res);
-  });
+  db.insertWithReturn(
+    query,
+    function (err, res) {
+      console.log(res);
+      insertViewing(req.file, values, res, json.type);
+    },
+    json.type
+  );
 });
 
 app.post("/update/:type/:id", (req, res) => {
   let table;
   let setColumns;
 
-  if (req.params.type === "vespa") {
-    setColumns = Object.keys(req.body.avistamento).map(
-      (key, i) => `${key} = $${i + 1}`
-    );
-    table = "avistamentos";
-  }
+  setColumns = Object.keys(req.body.avistamento).map(
+    (key, i) => `${key} = $${i + 1}`
+  );
+  table = "avistamentos";
 
   const queryUpdate = {
     text: `UPDATE public.${table} SET ${setColumns} WHERE id=${req.params.id}`,
     values: Object.values(req.body.avistamento),
   };
-
   if (queryUpdate.values.length > 0) db.query(queryUpdate);
+
+  let specId;
+  let values;
+  let specIdString;
+  if (req.params.type === "vespa") {
+    specId = req.body.vespas.vespaid;
+    specIdString = "vespaid";
+    delete req.body.vespas.vespaid;
+    table = "vespas";
+    setColumns = Object.keys(req.body.vespas).map(
+      (key, i) => `${key} = $${i + 1}`
+    );
+    values = Object.values(req.body.vespas);
+  } else {
+    specId = req.body.nest.nestid;
+    specIdString = "nestid";
+    delete req.body.nest.nestid;
+    table = "ninhos";
+    setColumns = Object.keys(req.body.nest).map(
+      (key, i) => `${key} = $${i + 1}`
+    );
+    values = Object.values(req.body.nest);
+  }
+
+  const querySpecificUpdate = {
+    text: `UPDATE public.${req.params.type}s SET ${setColumns} WHERE ${specIdString}=${specId}`,
+    values: Object.values(values),
+  };
+
+  db.query(querySpecificUpdate);
 });
 
 app.listen("8080", () => console.log("hi!"));
