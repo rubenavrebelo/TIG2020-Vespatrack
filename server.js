@@ -12,9 +12,6 @@ var app = express();
 
 var geojson = JSON.parse(fs.readFileSync("./public/concelhos.geojson", "utf8"));
 
-const queryYear =
-  "SELECT * FROM avistamentos WHERE EXTRACT(year FROM date) = ($1)";
-
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/uploads");
@@ -46,7 +43,7 @@ app.get("/ninhos", async (req, res) => {
   res.send(result.rows);
 });
 
-app.get("/years/", async (req, res) => {
+app.get("/years", async (req, res) => {
   const result = await db.query(
     "select distinct extract(year from date) from avistamentos;"
   );
@@ -201,19 +198,45 @@ app.put("/update_photo/:id", upload.single("photo"), (req, res) => {
 app.post("/filter", async (req, res) => {
   let params = "";
 
+  let dataQuery = "";
+
   Object.keys(req.body.data).map((val, i) => {
     if (i < Object.keys(req.body.data).length - 1) {
-      params = params.concat(`${val} = ANY($${i + 1}::text[]) AND `);
-    } else {
-      params = params.concat(`${val} = ANY($${i + 1}::text[])`);
+      params = params.concat(
+        `AND ${val} = ANY($${req.body.data.years.length * 2 + i + 1}::text[])`
+      );
     }
   });
 
+  req.body.data.years.map((date, j) => {
+    if (j < req.body.data.years.length - 1) {
+      dataQuery = dataQuery.concat(
+        `date >= ($${2 * j + 1})::date AND date <= ($${2 * (j + 1)})::date OR `
+      );
+    } else {
+      dataQuery = dataQuery.concat(
+        `date >= ($${2 * j + 1})::date AND date <= ($${2 * (j + 1)})::date`
+      );
+    }
+  });
+
+  let valuesArray = [];
+
+  req.body.data.years.map((key) => {
+    valuesArray.push(key + "-01-01");
+    valuesArray.push(key + "-12-31");
+  });
+
+  valuesArray = valuesArray.concat(
+    Object.keys(req.body.data)
+      .map((key) => {
+        if (key !== "years") return Object.values(req.body.data[key]);
+      })
+      .filter((el) => el !== undefined)
+  );
   var query = {
-    text: `SELECT * FROM avistamentos WHERE ${params}`,
-    values: Object.keys(req.body.data).map((key) =>
-      Object.values(req.body.data[key])
-    ),
+    text: `SELECT * FROM avistamentos WHERE avistamentos.id IN (SELECT id FROM avistamentos WHERE ${dataQuery}) ${params}`,
+    values: valuesArray,
   };
 
   const result = await db.query(query);
