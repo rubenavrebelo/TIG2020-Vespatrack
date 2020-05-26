@@ -15,7 +15,6 @@ var geojson = JSON.parse(fs.readFileSync("./public/concelhos.geojson", "utf8"));
 const queryYear =
   "SELECT * FROM avistamentos WHERE EXTRACT(year FROM date) = ($1)";
 
-const updateStates = `UPDATE ninhos SET past_states = array_append(past_states, 'teste') WHERE nestid=1;`;
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/uploads");
@@ -68,7 +67,6 @@ app.get("/infodetails/:type/:id", async (req, res) => {
     type === "vespas" ? "vespaid" : "nestid"
   } WHERE avistamentos.id=($1)`;
   const result = await db.query({ text: detailQuery, values: [req.params.id] });
-  result.rows[0].past_states = postgresArray.parse(result.rows[0].past_states);
   res.send(result.rows[0]);
 });
 
@@ -76,14 +74,13 @@ function insertViewing(file, values, id, type) {
   if (file) values.push(file.originalname);
   values.push(id);
   const queryViewing = {
-    text: `INSERT INTO public.avistamentos (type, state, local, date, lat, lng, localType${
-      file ? ",photo" : ","
+    text: `INSERT INTO public.avistamentos (type, state, local, date, lat, lng, localType,${
+      file ? "photo," : ""
     } ${
       type === "Vespa" ? "specific_id" : "nest_specific_id"
     }) VALUES ($1, $2, $3, $4, $5, $6, $7, $8${file ? ",$9)" : ")"}`,
     values,
   };
-  console.log(id);
   db.insert(queryViewing);
 }
 
@@ -115,14 +112,15 @@ app.post("/add", upload.single("photo"), (req, res) => {
   db.insertWithReturn(
     query,
     function (err, res) {
-      console.log(res);
       insertViewing(req.file, values, res, json.type);
     },
     json.type
   );
+  res.send(query);
 });
 
 app.post("/update/:type/:id", (req, res) => {
+  console.log(req.params.id);
   let table;
   let setColumns;
 
@@ -159,13 +157,39 @@ app.post("/update/:type/:id", (req, res) => {
     );
     values = Object.values(req.body.nest);
   }
-
   const querySpecificUpdate = {
     text: `UPDATE public.${req.params.type}s SET ${setColumns} WHERE ${specIdString}=${specId}`,
     values: Object.values(values),
   };
 
   db.query(querySpecificUpdate);
+});
+
+app.post("/update_state/:type/:id", (req, res) => {
+  const current_state =
+    req.params.type === "vespas" ? "state_hornet" : "state_nest";
+  const current_id = req.params.type === "vespas" ? "vespaid" : "nestid";
+  const queryUpdate = {
+    text: `UPDATE public.${req.params.type} SET past_states = array_append(past_states, ($1)), ${current_state} = ($2) WHERE ${current_id}=${req.params.id}`,
+    values: [Object.values(req.body)[0], Object.values(req.body)[1]],
+  };
+  db.query(queryUpdate);
+
+  const viewingQuery = {
+    text: `UPDATE public.avistamentos SET state = ($2) WHERE id=($1)`,
+    values: [Object.values(req.body)[2], Object.values(req.body)[3]],
+  };
+  db.query(viewingQuery);
+  res.send({});
+});
+
+app.put("/update_photo/:id", upload.single("photo"), (req, res) => {
+  const viewingQuery = {
+    text: `UPDATE public.avistamentos SET photo = ($1) WHERE id=($2)`,
+    values: [req.file.originalname, req.params.id],
+  };
+  db.query(viewingQuery);
+  res.send({});
 });
 
 app.listen("8080", () => console.log("hi!"));
