@@ -46,6 +46,13 @@ app.get("/ninhos", async (req, res) => {
   res.send(result.rows);
 });
 
+app.get("/years/", async (req, res) => {
+  const result = await db.query(
+    "select distinct extract(year from date) from avistamentos;"
+  );
+  res.send(result.rows);
+});
+
 app.get("/:id", async (req, res) => {
   if (req.params.id === "concelhos") {
     res.send(geojson);
@@ -120,7 +127,6 @@ app.post("/add", upload.single("photo"), (req, res) => {
 });
 
 app.post("/update/:type/:id", (req, res) => {
-  console.log(req.params.id);
   let table;
   let setColumns;
 
@@ -190,6 +196,29 @@ app.put("/update_photo/:id", upload.single("photo"), (req, res) => {
   };
   db.query(viewingQuery);
   res.send({});
+});
+
+app.post("/filter", async (req, res) => {
+  let params = "";
+
+  Object.keys(req.body.data).map((val, i) => {
+    if (i < Object.keys(req.body.data).length - 1) {
+      params = params.concat(`${val} = ANY($${i + 1}::text[]) AND `);
+    } else {
+      params = params.concat(`${val} = ANY($${i + 1}::text[])`);
+    }
+  });
+
+  var query = {
+    text: `SELECT * FROM avistamentos WHERE ${params}`,
+    values: Object.keys(req.body.data).map((key) =>
+      Object.values(req.body.data[key])
+    ),
+  };
+
+  const result = await db.query(query);
+
+  res.send(result.rows);
 });
 
 app.listen("8080", () => console.log("hi!"));
