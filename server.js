@@ -2,6 +2,7 @@ const { Client } = require("pg");
 const express = require("express");
 const cors = require("cors");
 const db = require("./db");
+const gmaps = require("./google-maps-aux");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const multer = require("multer");
@@ -53,6 +54,9 @@ app.get("/years", async (req, res) => {
 app.get("/:id", async (req, res) => {
   if (req.params.id === "concelhos") {
     res.send(geojson);
+  } else if (req.params.id === "exterminadores") {
+    const result = await db.query("SELECT * FROM exterminador");
+    res.send(result.rows);
   } else {
     const result = await db.query(
       `SELECT * FROM avistamentos WHERE id=${req.params.id};`
@@ -60,8 +64,6 @@ app.get("/:id", async (req, res) => {
     res.send(result.rows[0]);
   }
 });
-
-app.get("/concelhos", async (req, res) => {});
 
 app.get("/infodetails/:type/:id", async (req, res) => {
   const { type } = req.params;
@@ -78,11 +80,11 @@ function insertViewing(file, values, id, type) {
   if (file) values.push(file.originalname);
   values.push(id);
   const queryViewing = {
-    text: `INSERT INTO public.avistamentos (type, state, local, date, lat, lng, localType,${
+    text: `INSERT INTO public.avistamentos (type, state, local, date, lat, lng, localType,municipality,${
       file ? "photo," : ""
     } ${
       type === "Vespa" ? "specific_id" : "nest_specific_id"
-    }) VALUES ($1, $2, $3, $4, $5, $6, $7, $8${file ? ",$9)" : ")"}`,
+    }) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9${file ? ",$10)" : ")"}`,
     values,
   };
   db.insert(queryViewing);
