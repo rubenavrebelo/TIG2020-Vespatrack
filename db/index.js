@@ -16,7 +16,6 @@ module.exports = {
       if (err) {
         callback(err);
       } else {
-        console.log(result.rows[0]);
         if (type === "Vespa") callback(null, result.rows[0].vespaid);
         else callback(null, result.rows[0].nestid);
       }

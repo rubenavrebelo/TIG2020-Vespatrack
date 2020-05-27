@@ -57,6 +57,11 @@ app.get("/:id", async (req, res) => {
   } else if (req.params.id === "exterminadores") {
     const result = await db.query("SELECT * FROM exterminador");
     res.send(result.rows);
+  } else if (req.params.id === "municipalities_risk") {
+    const result = await db.query(
+      "SELECT municipality, mode() WITHIN GROUP (ORDER BY state) AS mode FROM avistamentos group by municipality"
+    );
+    res.send(result.rows);
   } else {
     const result = await db.query(
       `SELECT * FROM avistamentos WHERE id=${req.params.id};`
@@ -246,4 +251,4 @@ app.post("/filter", async (req, res) => {
   res.send(result.rows);
 });
 
-app.listen("8080", () => console.log("hi!"));
+app.listen("8080", () => console.log("Vespatrack server started"));
