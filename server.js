@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 const aws = require("aws-sdk");
+const multerS3 = require("multer-s3");
 
 const S3_BUCKET = process.env.S3_BUCKET;
 aws.config.region = "us-east-1";
