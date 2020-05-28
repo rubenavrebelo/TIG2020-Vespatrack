@@ -9,6 +9,10 @@ const path = require("path");
 
 var app = express();
 
+var geojson = JSON.parse(
+  fs.readFileSync(".client/public/concelhos.geojson", "utf8")
+);
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/uploads");
@@ -24,10 +28,6 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "client/public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-var geojson = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "/concelhos.geojson", "utf8"))
-);
 
 app.get("/", async (req, res) => {
   const result = await db.query("SELECT * FROM avistamentos;");
