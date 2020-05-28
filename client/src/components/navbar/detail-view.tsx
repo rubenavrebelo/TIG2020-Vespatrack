@@ -316,7 +316,7 @@ export default function DetailView(props: Props) {
           {detailInfo.photo && !preview && (
             <ButtonBase onClick={handlefsImage}>
               <img
-                src={`https://vespatrack.herokuapp.com/uploads/${detailInfo.photo}`}
+                src={`https://tig2020-vespatrack.s3.amazonaws.com/uploads/${detailInfo.photo}`}
                 style={{ width: "100%" }}
                 alt={"Avistamento"}
               />
@@ -331,7 +331,7 @@ export default function DetailView(props: Props) {
           <Dialog open={fullscreenImage} onClose={handlefsImage}>
             <DialogContent>
               <img
-                src={`https://vespatrack.herokuapp.com/uploads/${detailInfo.photo}`}
+                src={`https://tig2020-vespatrack.s3.amazonaws.com/uploads/${detailInfo.photo}`}
                 alt={"Avistamento"}
               />
             </DialogContent>
