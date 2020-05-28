@@ -97,7 +97,7 @@ app.post("/add", upload.single("photo"), (req, res) => {
     const blobStream = blob.createWriteStream();
 
     blobStream.on("error", (err) => {
-      next(err);
+      console.log(err);
     });
 
     blobStream.on("finish", () => {
