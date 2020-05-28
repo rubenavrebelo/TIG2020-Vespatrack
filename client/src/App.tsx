@@ -31,7 +31,7 @@ function App() {
     exterminator: false,
   });
   const [allMunicip, setAllMunicip] = React.useState<any[]>([]);
-  const [fitBoundsMunicip, setFBMunicip] = React.useState<string>();
+  const [fitBoundsMunicip, setFBMunicip] = React.useState<string>("");
 
   const addNewViewing = (type: string, localType: string, photo?: File) => {
     let data = new FormData();
