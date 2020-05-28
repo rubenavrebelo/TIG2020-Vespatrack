@@ -5,6 +5,7 @@ const dbimports = require("./automatic-import");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const path = require("path");
 
 var app = express();
 
@@ -22,7 +23,7 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(cors());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "client/public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
