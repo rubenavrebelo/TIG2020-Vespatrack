@@ -21,7 +21,7 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(cors());
-app.use("static/", express.static(path.join(__dirname, "client/public")));
+app.use("/static", express.static(path.join(__dirname, "client/public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -48,12 +48,7 @@ app.get("/years", async (req, res) => {
 });
 
 app.get("/:id", async (req, res) => {
-  if (req.params.id === "concelhos") {
-    var geojson = JSON.parse(
-      fs.readFileSync("./client/public/concelhos.geojson", "utf8")
-    );
-    res.send(geojson);
-  } else if (req.params.id === "exterminadores") {
+  if (req.params.id === "exterminadores") {
     const result = await db.query("SELECT * FROM exterminador");
     res.send(result.rows);
   } else if (req.params.id === "municipalities_risk") {
