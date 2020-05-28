@@ -149,7 +149,7 @@ function App() {
   React.useEffect(() => {
     getYears();
     if (!filter) {
-      fetch("https://vespatrack.herokuapp.com/avistaentos")
+      fetch("https://vespatrack.herokuapp.com/avistamentos")
         .then((res) => res.json())
         .then((result) => setMarkers(result));
     } else {

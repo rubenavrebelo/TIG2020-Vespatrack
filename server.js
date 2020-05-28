@@ -93,20 +93,19 @@ function insertViewing(file, values, id, type) {
 
 app.post("/add", upload.single("photo"), (req, res) => {
   if (req.file) {
-    const file = bucket.file(req.file.originalname);
-    const stream = file.createWriteStream({
-      metadata: {
-        contentType: req.file.mimetype,
-      },
-      resumable: false,
+    const blob = bucket.file(req.file.originalname);
+    const blobStream = blob.createWriteStream();
+
+    blobStream.on("error", (err) => {
+      next(err);
     });
-    stream.on("finish", () => {
-      req.file.cloudStorageObject = gcsname;
-      file.makePublic().then(() => {
-        req.file.cloudStoragePublicUrl = getPublicUrl(gcsname);
-        next();
-      });
+
+    blobStream.on("finish", () => {
+      const publicUrl = format(
+        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+      );
     });
+    blobStream.end(req.file.buffer);
   }
   const json = JSON.parse(req.body.data);
   const values = Object.values(json);
