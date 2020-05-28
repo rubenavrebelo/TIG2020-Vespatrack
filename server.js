@@ -1,13 +1,10 @@
-const { Client } = require("pg");
 const express = require("express");
 const cors = require("cors");
 const db = require("./db");
-const gmaps = require("./google-maps-aux");
+const dbimports = require("./automatic-import");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const multer = require("multer");
-const path = require("path");
-var postgresArray = require("postgres-array");
 
 var app = express();
 
@@ -251,4 +248,9 @@ app.post("/filter", async (req, res) => {
   res.send(result.rows);
 });
 
-app.listen("8080", () => console.log("Vespatrack server started"));
+app.listen("8080", async () => {
+  const result = await db.query("SELECT * FROM avistamentos");
+  if (result.rows.length === 0) {
+    dbimports.automaticImport();
+  }
+});

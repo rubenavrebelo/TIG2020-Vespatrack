@@ -1,0 +1,125 @@
+{
+  "avistamentos": [
+    {
+      "id": 1,
+      "type": "Vespa",
+      "state": "Em Progresso",
+      "local": "R. Bernardim Ribeiro 74, 4430 Vila Nova de Gaia, Portugal",
+      "date": "2020-04-30",
+      "lat": "41.112609",
+      "lng": "-8.610489",
+      "localtype": "Residencial",
+      "municipality": "Vila Nova de Gaia",
+      "specific_id": 1
+    },
+    {
+      "id": 2,
+      "type": "Ninho",
+      "state": "Resolvido",
+      "local": "GuimarãeShopping, Alameda Dr. Mariano Felgueiras, 4835-075 Guimarães, Portugal",
+      "date": "2018-07-27",
+      "lat": "41.439982",
+      "lng": "-8.303623",
+      "localtype": "Comercial",
+      "municipality": "Guimarães",
+      "nest_specific_id": 1
+    },
+    {
+      "id": 3,
+      "type": "Vespa",
+      "state": "Em Progresso",
+      "local": "Campo Grande 18, 1700-162 Lisboa, Portugal",
+      "date": "2020-04-30",
+      "lat": "38.756743",
+      "lng": "-9.153877",
+      "localtype": "Residencial",
+      "municipality": "Lisboa",
+      "specific_id": 2
+    },
+    {
+      "id": 4,
+      "type": "Ninho",
+      "state": "Em Progresso",
+      "local": "N377-1 1, 2825 Caparica, Portugal",
+      "date": "2018-07-27",
+      "lat": "38.659761",
+      "lng": "-9.204473",
+      "localtype": "Comercial",
+      "municipality": "Almada",
+      "nest_specific_id": 2
+    },
+    {
+      "id": 5,
+      "type": "Ninho",
+      "state": "Não Resolvido",
+      "local": "Rua dos Moinhos 8, 2670 Loures, Portugal",
+      "date": "2020-05-18",
+      "lat": "38.85337",
+      "lng": "-9.206528",
+      "localtype": "Residencial",
+      "municipality": "Almada",
+      "nest_specific_id": 3
+    },
+    {
+      "id": 6,
+      "type": "Vespa",
+      "state": "Não Resolvido",
+      "local": "R. Brg. Neves Costa 1B, 2560-311 Torres Vedras, Portugal",
+      "date": "2020-05-27",
+      "lat": "39.089744",
+      "lng": "-9.258563",
+      "localtype": "Residencial",
+      "municipality": "Torres Vedras",
+      "specific_id": 3
+    }
+  ],
+  "vespas": [
+    {
+      "vespaid": 1,
+      "state_hornet": "Vespa confirmada",
+      "past_states": ["Não verificada"],
+      "confirmed_asian": true
+    },
+    {
+      "vespaid": 2,
+      "state_hornet": "Exterminação Agendada",
+      "past_states": ["Não verificada"],
+      "confirmed_asian": false
+    },
+    {
+      "vespaid": 3,
+      "state_hornet": "Vespa confirmada",
+      "past_states": ["Não verificada", "Exterminador Contactado"],
+      "confirmed_asian": true
+    }
+  ],
+  "ninhos": [
+    {
+      "nestid": 1,
+      "colony": false,
+      "destroyed": true,
+      "state_nest": "Resolvido - Ninho destruído",
+      "past_states": [
+        "Não verificado",
+        "Confirmado - por resolver",
+        "Exterminador contactado",
+        "Exterminação Agendada"
+      ],
+      "destruction_date": "2018-08-04"
+    },
+    {
+      "nestid": 2,
+      "colony": false,
+      "destroyed": true,
+      "state_nest": "Exterminador contactado",
+      "past_states": ["Não verificado"]
+    },
+    {
+      "nestid": 3,
+      "colony": false,
+      "destroyed": true,
+      "state_nest": "Não verificado",
+      "past_states": []
+    }
+  ]
+}

@@ -1,4 +1,12 @@
 const { Pool } = require("pg");
+const { Client } = require("pg");
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 
 const pool = new Pool({
   user: "postgres",
@@ -7,6 +15,8 @@ const pool = new Pool({
   password: "3ds4life",
   port: 5432,
 });
+
+// client.connect();
 
 module.exports = {
   query: (text, params) => pool.query(text, params),
