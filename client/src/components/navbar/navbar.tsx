@@ -31,6 +31,7 @@ interface Props {
   query: boolean;
   updatePhoto: (photo?: File) => void;
   setMunicipality: (municipality: string) => void;
+  handleSidebarClose: () => void;
 }
 
 const drawerWidth = "25%";
@@ -114,7 +115,7 @@ export default function Navbar(props: Props) {
           paper: classes.drawerPaper,
         }}
       >
-        <IconButton onClick={props.sidebarOpen(false)}>
+        <IconButton onClick={props.handleSidebarClose}>
           <ArrowForwardIcon />
         </IconButton>
         <div className={classes.drawerContainer}>

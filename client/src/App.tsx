@@ -178,6 +178,7 @@ function App() {
             id={currentId}
             center={center}
             query={query}
+            handleSidebarClose={handleInfoWClose}
           />
           <FilterPaper years={years} setMarkers={postFilter} />
           <LayersPaper layers={layers} setLayer={setLayers} />
