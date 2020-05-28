@@ -8,7 +8,7 @@ const path = require("path");
 const { Storage } = require("@google-cloud/storage");
 
 const storage = new Storage({
-  keyFilename: "./client/public/jsontig2020-275811-74fc34c94787.json",
+  keyFilename: path.join(__dirname, "/tig2020-275811-74fc34c94787.json"),
 });
 
 var app = express();
