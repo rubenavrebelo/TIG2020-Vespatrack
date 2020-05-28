@@ -6,19 +6,23 @@ const fs = require("fs");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
+const aws = require("aws-sdk");
+
+const S3_BUCKET = process.env.S3_BUCKET;
+aws.config.region = "us-east-1";
+s3 = new aws.S3();
 
 var app = express();
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./public/uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
+var upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: S3_BUCKET,
+    key: function (req, file, cb) {
+      cb(null, file.originalname);
+    },
+  }),
 });
-
-const upload = multer({ storage: storage });
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));

@@ -275,7 +275,7 @@ export default function Maps(props: Props) {
   };
 
   const initialLoad = () => {
-    fetch("https://vespatrack.herokuapp.com/concelhos")
+    fetch("https://vespatrack.herokuapp.com/concelhos.geojson")
       .then((res) => res.json())
       .then((result) => setgeoJSON(result));
     fetch("https://vespatrack.herokuapp.com/municipalities_risk")
