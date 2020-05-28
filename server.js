@@ -93,7 +93,7 @@ function insertViewing(file, values, id, type) {
 
 app.post("/add", upload.single("photo"), (req, res) => {
   if (req.file) {
-    const blob = bucket.file(req.file.originalname);
+    const blob = bucket.file("uploads/" + req.file.originalname);
     const blobStream = blob.createWriteStream();
 
     blobStream.on("error", (err) => {
@@ -201,6 +201,16 @@ app.post("/update_state/:type/:id", (req, res) => {
 });
 
 app.put("/update_photo/:id", upload.single("photo"), (req, res) => {
+  if (req.file) {
+    const blob = bucket.file("uploads/" + req.file.originalname);
+    const blobStream = blob.createWriteStream();
+
+    blobStream.on("error", (err) => {
+      console.log(err);
+    });
+
+    blobStream.end(req.file.buffer);
+  }
   const viewingQuery = {
     text: `UPDATE public.avistamentos SET photo = ($1) WHERE id=($2)`,
     values: [req.file.originalname, req.params.id],
