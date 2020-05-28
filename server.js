@@ -50,7 +50,7 @@ app.get("/years", async (req, res) => {
 app.get("/:id", async (req, res) => {
   if (req.params.id === "concelhos") {
     var geojson = JSON.parse(
-      fs.readFileSync("https://vespatrack.heroku.com/concelhos.json", "utf8")
+      fs.readFileSync("https://vespatrack.herokuapp.com/concelhos.json", "utf8")
     );
     res.send(geojson);
   } else if (req.params.id === "exterminadores") {
