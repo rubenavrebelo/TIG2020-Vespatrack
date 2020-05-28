@@ -120,6 +120,7 @@ app.post("/add", upload.single("photo"), (req, res) => {
   db.insertWithReturn(
     query,
     function (err, res) {
+      console.log(("id", res));
       insertViewing(req.file, values, res, json.type);
     },
     json.type
