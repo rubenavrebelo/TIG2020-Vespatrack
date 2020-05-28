@@ -82,7 +82,7 @@ export default function AddViewing(props: Props) {
         props.setLocal(address);
       },
       (error) => {
-        console.error(error);
+        props.setLocal("");
       }
     );
   }, [props.center]);
@@ -241,7 +241,7 @@ export default function AddViewing(props: Props) {
         onClick={onAddButtonClick}
         variant={"outlined"}
         style={{ marginTop: "10px", marginBottom: "10px" }}
-        disabled={localtype === "" || viewType === ""}
+        disabled={localtype === "" || viewType === "" || props.local === ""}
       >
         Adicionar Avistamento
       </Button>

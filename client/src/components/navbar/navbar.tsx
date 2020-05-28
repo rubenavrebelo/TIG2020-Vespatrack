@@ -8,6 +8,8 @@ import {
   Drawer,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+
 import AddViewing from "./add-edit/add-viewing";
 import grey from "@material-ui/core/colors/grey";
 import DetailView from "./detail-view";
@@ -112,6 +114,9 @@ export default function Navbar(props: Props) {
           paper: classes.drawerPaper,
         }}
       >
+        <IconButton onClick={props.sidebarOpen(false)}>
+          <ArrowForwardIcon />
+        </IconButton>
         <div className={classes.drawerContainer}>
           {props.mode === "infoDetail" ? (
             props.id !== -1 && (
