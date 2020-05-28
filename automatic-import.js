@@ -35,7 +35,6 @@ module.exports = {
         values: Object.values(viewing),
       };
       db.insert(queryViewing);
-      console.log(queryViewing);
     });
   },
 };

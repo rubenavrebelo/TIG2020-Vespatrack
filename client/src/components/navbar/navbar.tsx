@@ -6,6 +6,7 @@ import {
   Typography,
   makeStyles,
   Drawer,
+  TextField,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
@@ -15,6 +16,7 @@ import grey from "@material-ui/core/colors/grey";
 import DetailView from "./detail-view";
 import { SidebarMode } from "../../App";
 import { Center } from "../google-maps/maps";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 interface Props {
   sidebarOpen: boolean;
@@ -32,6 +34,7 @@ interface Props {
   updatePhoto: (photo?: File) => void;
   setMunicipality: (municipality: string) => void;
   handleSidebarClose: () => void;
+  municipalities: any[];
 }
 
 const drawerWidth = "25%";
@@ -73,6 +76,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Navbar(props: Props) {
+  const [value, setValue] = React.useState<string | null>(
+    props.municipalities[0]
+  );
+  const [inputValue, setInputValue] = React.useState("");
+
   const classes = useStyles();
 
   return (
@@ -96,6 +104,27 @@ export default function Navbar(props: Props) {
               Vespatrack
             </Typography>
           </div>
+          <Autocomplete
+            value={value}
+            onChange={(event: any, newValue: string | null) => {
+              setValue(newValue);
+              props.setMunicipality(newValue ? newValue : "");
+            }}
+            inputValue={inputValue}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
+            options={props.municipalities}
+            getOptionLabel={(option: any) => option}
+            style={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Zoom em Concelho"
+                variant="outlined"
+              />
+            )}
+          />
           <IconButton
             edge="end"
             className={classes.menuButton}
@@ -115,10 +144,10 @@ export default function Navbar(props: Props) {
           paper: classes.drawerPaper,
         }}
       >
-        <IconButton onClick={props.handleSidebarClose}>
-          <ArrowForwardIcon />
-        </IconButton>
         <div className={classes.drawerContainer}>
+          <IconButton onClick={props.handleSidebarClose}>
+            <ArrowForwardIcon />
+          </IconButton>
           {props.mode === "infoDetail" ? (
             props.id !== -1 && (
               <DetailView

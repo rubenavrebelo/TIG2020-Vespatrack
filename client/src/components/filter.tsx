@@ -214,7 +214,6 @@ export default function FilterPaper(props: Props) {
     );
   };
 
-  console.log("render");
   return (
     <Paper className={classes.root} elevation={0}>
       <Typography variant={"h6"} className={classes.filterText}>

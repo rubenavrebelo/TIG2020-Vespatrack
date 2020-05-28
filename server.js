@@ -129,7 +129,6 @@ app.post("/add", upload.single("photo"), (req, res) => {
   db.insertWithReturn(
     query,
     function (err, res) {
-      console.log(("id", res));
       insertViewing(req.file, values, res, json.type);
     },
     json.type
@@ -272,7 +271,6 @@ app.post("/filter", async (req, res) => {
 });
 
 app.listen(process.env.PORT || "8080", async () => {
-  console.log(S3_BUCKET);
   const result = await db.query("SELECT * FROM avistamentos");
   if (result.rows.length === 0) {
     dbimports.automaticImport();

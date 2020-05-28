@@ -30,6 +30,7 @@ function App() {
     risk: false,
     exterminator: false,
   });
+  const [allMunicip, setAllMunicip] = React.useState<any[]>([]);
 
   const addNewViewing = (type: string, localType: string, photo?: File) => {
     let data = new FormData();
@@ -146,8 +147,20 @@ function App() {
     setSearched(false);
   };
 
+  const getMunicipalities = () => {
+    fetch("https://vespatrack.herokuapp.com/concelhos.geojson")
+      .then((res) => res.json())
+      .then((result) => {
+        const municips = result.features.map(
+          (municip: any) => municip.properties.NAME_2
+        );
+        setAllMunicip(municips);
+      });
+  };
+
   React.useEffect(() => {
     getYears();
+    if (allMunicip.length === 0) getMunicipalities();
     if (!filter) {
       fetch("https://vespatrack.herokuapp.com/avistamentos")
         .then((res) => res.json())
@@ -179,6 +192,7 @@ function App() {
             center={center}
             query={query}
             handleSidebarClose={handleInfoWClose}
+            municipalities={allMunicip}
           />
           <FilterPaper years={years} setMarkers={postFilter} />
           <LayersPaper layers={layers} setLayer={setLayers} />

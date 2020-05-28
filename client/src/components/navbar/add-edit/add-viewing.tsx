@@ -148,7 +148,6 @@ export default function AddViewing(props: Props) {
   React.useEffect(() => {
     const { lat, lng } = props.center;
     if (lat !== 0 && lng !== 0) geocodeCoords();
-    console.log(lat, lng, props.local);
     if (!selectedPhoto) {
       setPreviewCallback(undefined);
       return;

@@ -163,41 +163,6 @@ export default function Maps(props: Props) {
     });
   };
 
-  const handleGeoJsonColoring = (path: any[]) => {
-    /*let inprogress = 0;
-    let solved = 0;
-    let notsolved = 0;
-    console.log(
-      props.markers.filter(
-        (m) =>
-          m.date.includes((moment().month() + 1).toString()) &&
-          m.date.includes(moment().year().toString())
-      )
-    );
-    /*props.markers
-      .filter(
-        (m) =>
-          m.date.includes((moment().month() + 1).toString()) &&
-          m.date.includes(moment().year().toString())
-      )
-      .map((m) => {
-        const { lat, lng } = m;
-        const contains = window.google.maps.geometry.poly.containsLocation(
-          new window.google.maps.LatLng(lat, lng),
-          new window.google.maps.Polygon({ paths: path })
-        );
-        if (contains)
-          m.state === "Resolvido"
-            ? solved++
-            : m.state === "Não Resolvido"
-            ? notsolved++
-            : inprogress++;
-      });
-    if (solved > inprogress && solved > notsolved) return "#73c16b";
-    else if (notsolved > inprogress && notsolved > solved) return "#a51e1e";
-    else return "#ebb74c";*/
-  };
-
   const loadGeoJson = () => {
     return geoJSON.features.map((concelho: any) => {
       let coordinates = concelho.geometry.coordinates[0];
@@ -281,7 +246,6 @@ export default function Maps(props: Props) {
     fetch("https://vespatrack.herokuapp.com/municipalities_risk")
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
         setRisks(result);
       });
     fetch("https://vespatrack.herokuapp.com/exterminadores")
@@ -309,7 +273,6 @@ export default function Maps(props: Props) {
     }
   }, [markerCallback, props, currentMarker]);
 
-  console.log("render");
   return (
     <div style={{ marginTop: "10vh" }}>
       <LoadScript
