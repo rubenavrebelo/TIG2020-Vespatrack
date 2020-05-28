@@ -35,6 +35,7 @@ interface Props {
   setMunicipality: (municipality: string) => void;
   handleSidebarClose: () => void;
   municipalities: any[];
+  setFBMunicip: (municip: string) => void;
 }
 
 const drawerWidth = "25%";
@@ -80,6 +81,7 @@ export default function Navbar(props: Props) {
     props.municipalities[0]
   );
   const [inputValue, setInputValue] = React.useState("");
+  const [enablePanTo, setPanTo] = React.useState<boolean>(false);
 
   const classes = useStyles();
 
@@ -104,27 +106,30 @@ export default function Navbar(props: Props) {
               Vespatrack
             </Typography>
           </div>
-          <Autocomplete
-            value={value}
-            onChange={(event: any, newValue: string | null) => {
-              setValue(newValue);
-              props.setMunicipality(newValue ? newValue : "");
-            }}
-            inputValue={inputValue}
-            onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
-            }}
-            options={props.municipalities}
-            getOptionLabel={(option: any) => option}
-            style={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Zoom em Concelho"
-                variant="outlined"
-              />
-            )}
-          />
+          {enablePanTo && (
+            <Autocomplete
+              style={{ marginTop: 9, width: 300 }}
+              value={value}
+              onChange={(event: any, newValue: string | null) => {
+                setValue(newValue);
+                props.setFBMunicip(newValue ? newValue : "");
+                setPanTo(false);
+              }}
+              inputValue={inputValue}
+              onInputChange={(event, newInputValue) => {
+                setInputValue(newInputValue);
+              }}
+              options={props.municipalities}
+              getOptionLabel={(option: any) => option}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Zoom em Concelho"
+                  variant="outlined"
+                />
+              )}
+            />
+          )}
           <IconButton
             edge="end"
             className={classes.menuButton}

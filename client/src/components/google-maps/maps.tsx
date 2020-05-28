@@ -23,6 +23,7 @@ interface Props {
   handleInfoWClose: () => void;
   query: boolean;
   layers: any;
+  fitBoundsMunicip: string;
 }
 
 interface MarkerRef {
@@ -75,6 +76,7 @@ export default function Maps(props: Props) {
     lat: -1,
     lng: -1,
   });
+  const [mapRef, setMapRef] = React.useState<any>();
 
   const handleMarkerClick = (m: DataMarker) => {
     if (currentMarker.id !== -1) setCurrentMarker(defaultMarker);
@@ -158,6 +160,7 @@ export default function Maps(props: Props) {
   };
 
   const onLoad = (map: any) => {
+    setMapRef(map);
     map.addListener("zoom_changed", () => {
       setZoom(map.zoom);
     });
@@ -264,6 +267,13 @@ export default function Maps(props: Props) {
 
   React.useEffect(() => {
     if (props.markers.length > 0) initialLoad();
+    if (props.fitBoundsMunicip !== "")
+      mapRef.fitBounds(
+        geoJSON.features.filter(
+          (municipality: any) =>
+            props.fitBoundsMunicip === municipality.properties.NAME_2
+        ).coordinates[0][0]
+      );
     if (props.searched) {
       markerCallback();
     } else {
@@ -271,7 +281,7 @@ export default function Maps(props: Props) {
       const marker = props.markers.find((marker) => marker.id === current.id);
       marker && setCurrentMarker(marker ? marker : current);
     }
-  }, [markerCallback, props, currentMarker]);
+  }, [markerCallback, props, currentMarker, props.fitBoundsMunicip]);
 
   return (
     <div style={{ marginTop: "10vh" }}>
