@@ -200,6 +200,7 @@ function App() {
           <LayersPaper layers={layers} setLayer={setLayers} />
           <main>
             <Maps
+              fitBoundsMunicip={fitBoundsMunicip}
               layers={layers}
               query={query}
               sidebarOpen={sidebarOpen}
