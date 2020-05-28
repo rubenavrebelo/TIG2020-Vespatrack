@@ -6,6 +6,7 @@
     "npm": "6.14.4",
     "node": "13.12.0"
   },
+  "homepage": "https://vespatrack.herokuapp.com/",
   "dependencies": {
     "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
