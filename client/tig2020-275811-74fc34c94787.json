@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "tig2020-275811",
+  "private_key_id": "74fc34c947873a786e94a93c1078994f81499a08",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDGtFxh8Q/iqERY\nW33fskHTneMHwZXQHgzFfwI7Lgw4P1f6HDXBdhVCeo4wUsHNbF7gG71et22JBC11\nah/UNpYTYPM4Kv5y0sVwbvqU/qbKOf0A40wTGe2wyS0gs+SiwbTJpixCW0zZuakZ\nmkw4M4mPKHbGrF/rIeg1btz7jjVpSO4lCvJUqsEYBeH1Z3eVGa+07j2s9xnz/i6c\nEpn4Q/apncwzBGrSaQaL+iQKPKbY3bOYrqv69WetMfKYeekZdYKoV3HveKNKG81j\nUtqUgToBOrjx99gA9pB+gLVkJZLh6CEgI5SALOem27JmVvkXwK0Y5EP8F7r0SslX\nmic6a2NFAgMBAAECggEAH+PWZ8meeQv0XBHi88HSGrpeM2J4Prxz5EZr/z92qphP\n8E4SuofPBapRo6PEgsl/uIv7KnZZ2AGZohx0G0TfdSC8KCmOSLNXCKJnCP6NmisQ\nVdIk5XPl19eRrIvyh8R61VocBFJO1Sqc3wUKcoKi8xzVYzFK+5unftvaD21VWR4Y\nnIuI1fvLtNyydn6vl86Zlvd/ayGiZSVJh0iO8VmpaRMFTHXzBIFlaCrgMVRrGfeH\nG5VDTEU+hR3fdIly/yWtAt/vXr4pgBOtuxWBClWdOifMlnddDYQjikMgzryuDj0Q\nLkL8Fr3qcV9sXkggMMOzh0V0tpO+b2LMckg749p9gQKBgQD2a+j640swk2+WsvHK\nVh/LEehz07Jo47ZTvOBS5hLP8gvw1hNwgs6MiJVrInfsh9t/4xyYifu1JwG6k6ex\n+u4nQ60KSMuIxQDvWpWCZY7HEJnvtREaddAurDvQsPcs1L79DNW+QkdhYNGt47GR\n/HFeMG4YWP7DTHzU63s8Y73HtQKBgQDObaD71e14QpG8ETfBb4D9khrO5V0XUWuR\njFfzAW6Qn5wFh/3K/AMvpKiFybgPl3rNEWr3OBsSUIj+kXrZTSV19VCix2ZFQPmf\n5uDHg9OMgHKrZDwV36BxJTNwwEnJCoE9HNEQwouWKPs5xZEkGnwiS3+Q1rv3h9dn\nCKd0yoxHUQKBgGCZXsRzM7eAJH9j+KsD5gS6KXC2bTr3ATOEWD/HF1rTHOE1WnuB\nm6y1ojVUVsSvYVmZ00zs0nJqLyBP365CmvdjbUMZ1EfySnKKBRAP9c+Nb3rrdR/1\nTT3uoKgnp024vIIAdQ3Xd5nx1WCgYKzE1EBDJfV/dadjpY/mG/JJe0z9AoGALmi7\nPqMT5mug9BUy4cw9xcRpPoaWbT2i33Ab/cgeoWkg3KV8S3xpAvcT5DA7r1WxCBWY\nZMg6Xd25TvJKGjyb5W8nl9EYjw1Skb6IXpKmpvnhzeKVF53VJlrku76fWBGCiMjH\nv+rdEv9Xq99dCC7kJZmvrlJ4o+foZ4OskjdPXmECgYBgk+yX+wLVrrbm2JrPft24\nEZWUTv7gbMb7vG1NGhO9TZyGbxO14nSFDdA4jkzBEcujGNoBzc3qHLqtMDLqm7NT\nzYitXhipKH2r8etx6E0Lx/EV9gqqroSaJJWztBiqwlXa8JVWmv617PCfy362couh\nm1xoFXvvnnavkFKoIbTjRQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "vespatrack-gcs@tig2020-275811.iam.gserviceaccount.com",
+  "client_id": "100190411585427598798",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vespatrack-gcs%40tig2020-275811.iam.gserviceaccount.com"
+}

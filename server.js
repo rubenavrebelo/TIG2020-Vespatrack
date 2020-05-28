@@ -2,28 +2,25 @@ const express = require("express");
 const cors = require("cors");
 const db = require("./db");
 const dbimports = require("./automatic-import");
-const fs = require("fs");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
-const aws = require("aws-sdk");
-const multerS3 = require("multer-s3");
+const { Storage } = require("@google-cloud/storage");
 
-const S3_BUCKET = process.env.S3_BUCKET;
-aws.config.region = "us-east-1";
-s3 = new aws.S3();
+const storage = new Storage({
+  keyFilename: "tig2020-275811-74fc34c94787.json",
+});
 
 var app = express();
 
-var upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: S3_BUCKET,
-    key: function (req, file, cb) {
-      cb(null, file.originalname);
-    },
-  }),
+const upload = multer({
+  storage: Multer.memoryStorage(),
+  limits: {
+    fileSize: 15 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+  },
 });
+
+const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));
@@ -95,6 +92,22 @@ function insertViewing(file, values, id, type) {
 }
 
 app.post("/add", upload.single("photo"), (req, res) => {
+  if (req.file) {
+    const file = bucket.file(req.file.originalname);
+    const stream = file.createWriteStream({
+      metadata: {
+        contentType: req.file.mimetype,
+      },
+      resumable: false,
+    });
+    stream.on("finish", () => {
+      req.file.cloudStorageObject = gcsname;
+      file.makePublic().then(() => {
+        req.file.cloudStoragePublicUrl = getPublicUrl(gcsname);
+        next();
+      });
+    });
+  }
   const json = JSON.parse(req.body.data);
   const values = Object.values(json);
   let table;
@@ -252,6 +265,7 @@ app.post("/filter", async (req, res) => {
 });
 
 app.listen(process.env.PORT || "8080", async () => {
+  console.log(S3_BUCKET);
   const result = await db.query("SELECT * FROM avistamentos");
   if (result.rows.length === 0) {
     dbimports.automaticImport();

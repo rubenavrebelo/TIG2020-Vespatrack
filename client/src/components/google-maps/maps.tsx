@@ -146,7 +146,7 @@ export default function Maps(props: Props) {
             <img
               style={{ width: 150, margin: "0 auto", display: "block" }}
               alt={marker.type + marker.id}
-              src={`https://tig2020-vespatrack.s3.amazonaws.com/uploads/${marker.photo}`}
+              src={`https://storage.googleapis.com/tig2020-vespatrack/uploads/${marker.photo}`}
             />
           )}
           <Typography style={{ float: "right" }} variant={"caption"}>
