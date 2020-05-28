@@ -25,7 +25,11 @@ app.use("/static", express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", async (req, res) => {
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build", "index.html"));
+});
+
+app.get("/avistamentos", async (req, res) => {
   const result = await db.query("SELECT * FROM avistamentos;");
   res.send(result.rows);
 });

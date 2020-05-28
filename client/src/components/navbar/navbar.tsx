@@ -78,7 +78,9 @@ export default function Navbar(props: Props) {
         <Toolbar>
           <div style={{ textAlign: "left", marginTop: "auto" }}>
             <img
-              src={"http://localhost:8080/images/vespatrack_logo.png"}
+              src={
+                "https://vespatrack.herokuapp.com/images/vespatrack_logo.png"
+              }
               style={{ width: 50, display: "inline-block" }}
               alt={"Vespatrack logo"}
             />

@@ -80,11 +80,11 @@ export default function DetailView(props: Props) {
   };
 
   React.useEffect(() => {
-    fetch(`http://localhost:8080/${props.id}`)
+    fetch(`https://vespatrack.herokuapp.com/${props.id}`)
       .then((res) => res.json())
       .then((result) => {
         fetch(
-          `http://localhost:8080/infodetails/${result.type.toLowerCase()}s/${
+          `https://vespatrack.herokuapp.com/infodetails/${result.type.toLowerCase()}s/${
             props.id
           }`
         )
@@ -182,7 +182,7 @@ export default function DetailView(props: Props) {
       };
 
       fetch(
-        `http://localhost:8080/update/${detailInfo.type.toLowerCase()}/${
+        `https://vespatrack.herokuapp.com/update/${detailInfo.type.toLowerCase()}/${
           props.id
         }`,
         requestOptions
@@ -316,7 +316,7 @@ export default function DetailView(props: Props) {
           {detailInfo.photo && !preview && (
             <ButtonBase onClick={handlefsImage}>
               <img
-                src={`http://localhost:8080/uploads/${detailInfo.photo}`}
+                src={`https://vespatrack.herokuapp.com/uploads/${detailInfo.photo}`}
                 style={{ width: "100%" }}
                 alt={"Avistamento"}
               />
@@ -331,7 +331,7 @@ export default function DetailView(props: Props) {
           <Dialog open={fullscreenImage} onClose={handlefsImage}>
             <DialogContent>
               <img
-                src={`http://localhost:8080/uploads/${detailInfo.photo}`}
+                src={`https://vespatrack.herokuapp.com/uploads/${detailInfo.photo}`}
                 alt={"Avistamento"}
               />
             </DialogContent>

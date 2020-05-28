@@ -57,7 +57,7 @@ function App() {
     setLocal("");
     setSearched(false);
     setSidebar(false);
-    fetch("http://localhost:8080/add", requestOptions)
+    fetch("https://vespatrack.herokuapp.com/add", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setQuery(!query);
@@ -75,7 +75,10 @@ function App() {
       body: data,
     };
 
-    fetch(`http://localhost:8080/update_photo/${currentId}`, requestOptions)
+    fetch(
+      `https://vespatrack.herokuapp.com/update_photo/${currentId}`,
+      requestOptions
+    )
       .then((response) => response.json())
       .then((result) => {
         setQuery(!query);
@@ -126,7 +129,7 @@ function App() {
   };
 
   const getYears = () => {
-    fetch("http://localhost:8080/years")
+    fetch("https://vespatrack.herokuapp.com/years")
       .then((resolve) => resolve.json())
       .then((result) => {
         {
@@ -146,11 +149,11 @@ function App() {
   React.useEffect(() => {
     getYears();
     if (!filter) {
-      fetch("http://localhost:8080/")
+      fetch("https://vespatrack.herokuapp.com/avistaentos")
         .then((res) => res.json())
         .then((result) => setMarkers(result));
     } else {
-      fetch("http://localhost:8080/filter", filterOptions)
+      fetch("https://vespatrack.herokuapp.com/filter", filterOptions)
         .then((response) => response.json())
         .then((result) => setMarkers(result));
     }

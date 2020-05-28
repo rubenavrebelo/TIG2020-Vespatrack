@@ -51,7 +51,7 @@ export default function Progression(props: Props) {
     <Avatar
       style={{ backgroundColor: props.color, width: 24, height: 24 }}
       classes={{ img: classes.img }}
-      src={"http://localhost:8080/images/step_hornet.png"}
+      src={"https://vespatrack.herokuapp.com/images/step_hornet.png"}
     />
   );
 
@@ -96,7 +96,7 @@ export default function Progression(props: Props) {
 
     if (props.specific_id) {
       fetch(
-        `http://localhost:8080/update_state/${props.type.toLowerCase()}s/${
+        `https://vespatrack.herokuapp.com/update_state/${props.type.toLowerCase()}s/${
           props.specific_id
         }`,
         requestOptions

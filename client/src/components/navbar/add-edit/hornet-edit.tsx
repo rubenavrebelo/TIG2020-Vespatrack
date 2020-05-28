@@ -49,7 +49,7 @@ export default function HornetEdit(props: Props) {
   ]);
 
   React.useEffect(() => {
-    fetch("http://localhost:8080/ninhos")
+    fetch("https://vespatrack.herokuapp.com/ninhos")
       .then((res) => res.json())
       .then((result) => setNumCallback(result.length));
   }, [setNumCallback]);

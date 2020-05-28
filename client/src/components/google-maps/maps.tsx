@@ -107,7 +107,7 @@ export default function Maps(props: Props) {
           onClick={() => handleMarkerClick(m)}
           onLoad={(marker) => markerLoadHandler(marker, m)}
           position={{ lat: m.lat, lng: m.lng }}
-          icon={`http://localhost:8080/images/${image}_32.png`}
+          icon={`https://vespatrack.herokuapp.com/images/${image}_32.png`}
         />
       );
     });
@@ -146,7 +146,7 @@ export default function Maps(props: Props) {
             <img
               style={{ width: 150, margin: "0 auto", display: "block" }}
               alt={marker.type + marker.id}
-              src={`http://localhost:8080/uploads/${marker.photo}`}
+              src={`https://vespatrack.herokuapp.com/uploads/${marker.photo}`}
             />
           )}
           <Typography style={{ float: "right" }} variant={"caption"}>
@@ -255,7 +255,7 @@ export default function Maps(props: Props) {
         <div>
           <Marker
             position={{ lat, lng }}
-            icon={`http://localhost:8080/images/exterminator.png`}
+            icon={`https://vespatrack.herokuapp.com/images/exterminator.png`}
           />
           <Circle center={{ lat, lng }} radius={10000} />
         </div>
@@ -275,16 +275,16 @@ export default function Maps(props: Props) {
   };
 
   const initialLoad = () => {
-    fetch("http://localhost:8080/concelhos")
+    fetch("https://vespatrack.herokuapp.com/concelhos")
       .then((res) => res.json())
       .then((result) => setgeoJSON(result));
-    fetch("http://localhost:8080/municipalities_risk")
+    fetch("https://vespatrack.herokuapp.com/municipalities_risk")
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
         setRisks(result);
       });
-    fetch("http://localhost:8080/exterminadores")
+    fetch("https://vespatrack.herokuapp.com/exterminadores")
       .then((res) => res.json())
       .then((result) => setExterminators(result));
   };
