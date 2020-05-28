@@ -16,13 +16,13 @@ const pool = new Pool({
   port: 5432,
 });
 
-// client.connect();
+client.connect();
 
 module.exports = {
-  query: (text, params) => pool.query(text, params),
-  insert: (query) => pool.query(query),
+  query: (text, params) => client.query(text, params),
+  insert: (query) => client.query(query),
   insertWithReturn: (query, callback, type) =>
-    pool.query(query, function (err, result) {
+    client.query(query, function (err, result) {
       if (err) {
         callback(err);
       } else {

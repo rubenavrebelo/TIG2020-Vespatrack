@@ -249,7 +249,7 @@ app.post("/filter", async (req, res) => {
   res.send(result.rows);
 });
 
-app.listen("8080", async () => {
+app.listen(process.env.PORT || "8080", async () => {
   const result = await db.query("SELECT * FROM avistamentos");
   if (result.rows.length === 0) {
     dbimports.automaticImport();
