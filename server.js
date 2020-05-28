@@ -100,11 +100,6 @@ app.post("/add", upload.single("photo"), (req, res) => {
       console.log(err);
     });
 
-    blobStream.on("finish", () => {
-      const publicUrl = format(
-        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-      );
-    });
     blobStream.end(req.file.buffer);
   }
   const json = JSON.parse(req.body.data);
