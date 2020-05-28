@@ -209,14 +209,17 @@ app.put("/update_photo/:id", upload.single("photo"), (req, res) => {
       console.log(err);
     });
 
+    blobStream.on("finish", () => {
+      const viewingQuery = {
+        text: `UPDATE public.avistamentos SET photo = ($1) WHERE id=($2)`,
+        values: [req.file.originalname, req.params.id],
+      };
+      db.query(viewingQuery);
+      res.sendStatus(200);
+    });
+
     blobStream.end(req.file.buffer);
   }
-  const viewingQuery = {
-    text: `UPDATE public.avistamentos SET photo = ($1) WHERE id=($2)`,
-    values: [req.file.originalname, req.params.id],
-  };
-  db.query(viewingQuery);
-  res.send({});
 });
 
 app.post("/filter", async (req, res) => {
