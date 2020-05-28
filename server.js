@@ -215,7 +215,7 @@ app.put("/update_photo/:id", upload.single("photo"), (req, res) => {
         values: [req.file.originalname, req.params.id],
       };
       db.query(viewingQuery);
-      res.sendStatus(200);
+      res.send({});
     });
 
     blobStream.end(req.file.buffer);
