@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     color: "#E5A627",
   },
+  idinput: { width: "15%" },
+  idInputContainer: { display: "inline" },
+  idInputTitle: { marginLeft: 5 }
 }));
 interface Props {
   setEditConfirmed: (confirmed: boolean) => void;
@@ -78,14 +81,14 @@ export default function HornetEdit(props: Props) {
           <MenuItem value={"false"}>Não</MenuItem>
         </Select>
         {props.isNest === "true" && numNests > 0 && (
-          <div style={{ display: "inline" }}>
-            <Typography style={{ marginLeft: 5 }} display={"inline"}>
+          <div className={classes.idInputContainer}>
+            <Typography className={classes.idInputTitle} display={"inline"}>
               ID:
             </Typography>
             <TextField
               onChange={handleNestId}
               value={props.nest}
-              style={{ width: "15%" }}
+              className={classes.idinput}
               type={"number"}
               InputProps={{ inputProps: { min: 0 } }}
             />

@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     width: "auto",
     height: "auto",
   },
+  newStateSelect: { width: "80%" },
 }));
 
 interface Props {
@@ -47,11 +48,13 @@ export default function Progression(props: Props) {
     setAddMode(!addMode);
   };
 
-  const CustomStepIcon = (props: { color: string }) => (
+  const CustomStepIcon = (avatarProps: { color: string }) => (
     <Avatar
-      style={{ backgroundColor: props.color, width: 24, height: 24 }}
+      style={{ backgroundColor: avatarProps.color, width: 24, height: 24 }}
       classes={{ img: classes.img }}
-      src={"https://vespatrack.herokuapp.com/images/step_hornet.png"}
+      src={`https://vespatrack.herokuapp.com/images/step_${
+        props.type === "Vespa" ? "hornet" : "nest"
+      }.png`}
     />
   );
 
@@ -149,7 +152,7 @@ export default function Progression(props: Props) {
               <StepLabel icon={<AddIcon />}>
                 <Select
                   defaultValue="newState"
-                  style={{ width: "80%" }}
+                  className={classes.newStateSelect}
                   onChange={onStateSelect}
                 >
                   {renderMenuItems(props.type)}

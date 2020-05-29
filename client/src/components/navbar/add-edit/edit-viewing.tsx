@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     color: "#E5A627",
   },
+  localTypeSelect: { width: "60%" },
 }));
 
 interface Props {
@@ -49,7 +50,7 @@ export default function EditViewing(props: Props) {
         <Select
           value={props.editedLocalType}
           onChange={handleLocalTypeChange}
-          style={{ width: "60%" }}
+          className={classes.localTypeSelect}
         >
           <MenuItem value={"Residencial"}>Residencial</MenuItem>
           <MenuItem value={"Rural"}>Rural</MenuItem>

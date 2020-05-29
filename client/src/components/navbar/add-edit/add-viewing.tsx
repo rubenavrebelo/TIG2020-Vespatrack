@@ -45,6 +45,16 @@ const useStyles = makeStyles((theme) => ({
   paperTitle: {
     marginBottom: "10px",
   },
+  firstPaper: {
+    padding: 15,
+    textAlign: "left",
+  },
+  addButton: { marginTop: "10px", marginBottom: "10px" },
+  optional: { marginBottom: "10px", color: grey[400] },
+  addressInput: { width: "80%" },
+  viewingType: { width: "70%", marginBottom: "15px" },
+  localType: { width: "70%" },
+  addButtonContainer: { textAlign: "center" },
 }));
 
 export default function AddViewing(props: Props) {
@@ -168,7 +178,7 @@ export default function AddViewing(props: Props) {
 
   return (
     <div>
-      <Paper className={classes.paper} elevation={0}>
+      <Paper className={classes.firstPaper} elevation={0}>
         <Typography variant={"h6"} className={classes.paperTitle}>
           Informação Geográfica
         </Typography>
@@ -192,7 +202,7 @@ export default function AddViewing(props: Props) {
           onChange={(e) => setCurrentLocal(e.target.value)}
           value={currentLocal}
           multiline
-          style={{ width: "80%" }}
+          className={classes.addressInput}
         />
         <IconButton onClick={handleSearch}>
           <SearchButton />
@@ -202,7 +212,7 @@ export default function AddViewing(props: Props) {
         <Typography variant={"h6"} className={classes.paperTitle}>
           Informação Avistamento
         </Typography>
-        <FormControl style={{ width: "70%", marginBottom: "15px" }}>
+        <FormControl className={classes.viewingType}>
           <InputLabel>Tipo de Avistamento</InputLabel>
           <Select value={viewType} onChange={handleViewTypeChange}>
             <MenuItem value={"Vespa"}>Vespa</MenuItem>
@@ -210,7 +220,7 @@ export default function AddViewing(props: Props) {
           </Select>
         </FormControl>
 
-        <FormControl style={{ width: "70%" }}>
+        <FormControl className={classes.localType}>
           <InputLabel>Tipo de Local</InputLabel>
           <Select value={localtype} onChange={handleLocalTypeChange} fullWidth>
             {LocalTypes.map((localtype) => (
@@ -229,21 +239,20 @@ export default function AddViewing(props: Props) {
           setPreview={setPreview}
           onImageUpload={onImageUpload}
         />
-        <Typography
-          variant={"caption"}
-          style={{ marginBottom: "10px", color: grey[400] }}
-        >
+        <Typography variant={"caption"} className={classes.optional}>
           *opcional
         </Typography>
       </Paper>
-      <Button
-        onClick={onAddButtonClick}
-        variant={"outlined"}
-        style={{ marginTop: "10px", marginBottom: "10px" }}
-        disabled={localtype === "" || viewType === "" || props.local === ""}
-      >
-        Adicionar Avistamento
-      </Button>
+      <div className={classes.addButtonContainer}>
+        <Button
+          onClick={onAddButtonClick}
+          variant={"outlined"}
+          className={classes.addButton}
+          disabled={localtype === "" || viewType === "" || props.local === ""}
+        >
+          Adicionar Avistamento
+        </Button>
+      </div>
     </div>
   );
 }

@@ -105,9 +105,11 @@ function App() {
     setSearched(false);
     setCurrentId(-1);
     setSidebar(false);
+    setFBMunicip("");
   };
 
   const handleMapClick = (center: Center) => {
+    setFBMunicip("");
     setCenter(center);
     setSearched(true);
     setLocal("");
@@ -121,7 +123,7 @@ function App() {
     setLocal("");
     setMode("infoDetail");
     setCurrentId(id);
-    if (!sidebarOpen) setSidebar(true);
+    setFBMunicip("");
   };
 
   const setCurrent = (lat?: number, lng?: number) => {
@@ -192,7 +194,7 @@ function App() {
             id={currentId}
             center={center}
             query={query}
-            handleSidebarClose={handleInfoWClose}
+            handleSidebarClose={setSidebar}
             municipalities={allMunicip}
             setFBMunicip={setFBMunicip}
           />
@@ -211,6 +213,7 @@ function App() {
               markers={markers}
               setMarkers={setMarkers}
               handleInfoWClose={handleInfoWClose}
+              setSidebar={setSidebar}
             />
           </main>
         </div>

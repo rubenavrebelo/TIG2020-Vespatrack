@@ -32,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
     padding: 15,
     textAlign: "left",
   },
+  firstPaper: {
+    padding: 15,
+    textAlign: "left",
+  },
   paperTitle: {
     marginBottom: "10px",
   },
@@ -39,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     color: "#E5A627",
   },
+  iconsContainer: { float: "right", marginTop: 5, marginRight: 5 },
+  editIcon: { float: "right" },
+  detailPhoto: { width: "100%" },
 }));
 
 interface Props {
@@ -195,7 +202,7 @@ export default function DetailView(props: Props) {
   return detailInfo ? (
     <div>
       {editMode ? (
-        <div style={{ float: "right", marginTop: 5, marginRight: 5 }}>
+        <div className={classes.iconsContainer}>
           <IconButton onClick={resetEdit}>
             <DeleteIcon />
           </IconButton>
@@ -209,13 +216,13 @@ export default function DetailView(props: Props) {
       ) : (
         <IconButton
           onClick={() => setEditMode(!editMode)}
-          style={{ float: "right" }}
+          className={classes.editIcon}
         >
           <EditIcon />
         </IconButton>
       )}
 
-      <Paper className={classes.paper} elevation={0}>
+      <Paper className={classes.firstPaper} elevation={0}>
         <Typography variant={"h6"} className={classes.paperTitle}>
           Informação Geral
         </Typography>
@@ -317,7 +324,7 @@ export default function DetailView(props: Props) {
             <ButtonBase onClick={handlefsImage}>
               <img
                 src={`https://storage.googleapis.com/tig2020-vespatrack/uploads/${detailInfo.photo}`}
-                style={{ width: "100%" }}
+                className={classes.detailPhoto}
                 alt={"Avistamento"}
               />
             </ButtonBase>

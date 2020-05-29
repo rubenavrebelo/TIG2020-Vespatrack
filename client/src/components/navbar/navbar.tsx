@@ -33,7 +33,7 @@ interface Props {
   query: boolean;
   updatePhoto: (photo?: File) => void;
   setMunicipality: (municipality: string) => void;
-  handleSidebarClose: () => void;
+  handleSidebarClose: (sibear: boolean) => void;
   municipalities: any[];
   setFBMunicip: (municip: string) => void;
 }
@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
+    textAlign: "left",
   },
   drawerPaper: {
     marginTop: "5%",
@@ -74,6 +75,11 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  logoContainer: { textAlign: "left", marginTop: "auto" },
+  logo: { width: 50, display: "inline-block" },
+  header: { marginTop: "10px", marginLeft: "10px" },
+  fullExtent: { marginTop: 9, width: 300 },
+  backButton: { marginTop: 5 },
 }));
 
 export default function Navbar(props: Props) {
@@ -89,26 +95,23 @@ export default function Navbar(props: Props) {
     <div>
       <AppBar position="fixed" className={classes.navBar}>
         <Toolbar>
-          <div style={{ textAlign: "left", marginTop: "auto" }}>
+          <div className={classes.logoContainer}>
             <img
               src={
                 "https://vespatrack.herokuapp.com/images/vespatrack_logo.png"
               }
-              style={{ width: 50, display: "inline-block" }}
+              className={classes.logo}
               alt={"Vespatrack logo"}
             />
           </div>
           <div className={classes.title}>
-            <Typography
-              variant={"h4"}
-              style={{ marginTop: "10px", marginLeft: "10px" }}
-            >
+            <Typography variant={"h4"} className={classes.header}>
               Vespatrack
             </Typography>
           </div>
           {enablePanTo && (
             <Autocomplete
-              style={{ marginTop: 9, width: 300 }}
+              className={classes.fullExtent}
               value={value}
               onChange={(event: any, newValue: string | null) => {
                 setValue(newValue);
@@ -151,8 +154,8 @@ export default function Navbar(props: Props) {
         }}
       >
         <div className={classes.drawerContainer}>
-          <IconButton onClick={props.handleSidebarClose}>
-            <ArrowForwardIcon />
+          <IconButton onClick={() => props.handleSidebarClose(false)}>
+            <ArrowForwardIcon className={classes.backButton} />
           </IconButton>
           {props.mode === "infoDetail" ? (
             props.id !== -1 && (

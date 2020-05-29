@@ -7,7 +7,7 @@ import {
   Polygon,
   Circle,
 } from "@react-google-maps/api";
-import { Typography } from "@material-ui/core";
+import { Typography, Link } from "@material-ui/core";
 import { DataMarker, Exterminator } from "../../types/types";
 import moment from "moment";
 
@@ -24,6 +24,7 @@ interface Props {
   query: boolean;
   layers: any;
   fitBoundsMunicip: string;
+  setSidebar: (sidebar: boolean) => void;
 }
 
 interface MarkerRef {
@@ -152,7 +153,9 @@ export default function Maps(props: Props) {
             />
           )}
           <Typography style={{ float: "right" }} variant={"caption"}>
-            Informações Detalhadas >
+            <Link onClick={() => props.setSidebar(true)}>
+              Informações Detalhadas >
+            </Link>
           </Typography>
         </div>
       </InfoWindow>
@@ -267,13 +270,19 @@ export default function Maps(props: Props) {
 
   React.useEffect(() => {
     if (props.markers.length > 0) initialLoad();
-    if (props.fitBoundsMunicip !== "")
-      mapRef.fitBounds(
-        geoJSON.features.filter(
+    if (props.fitBoundsMunicip !== "") {
+      const bounds = new window.google.maps.LatLngBounds();
+
+      geoJSON.features
+        .filter(
           (municipality: any) =>
             props.fitBoundsMunicip === municipality.properties.NAME_2
-        ).coordinates[0]
-      );
+        )[0]
+        .geometry.coordinates[0].map((coor: any) => {
+          bounds.extend(new window.google.maps.LatLng(coor[1], coor[0]));
+        });
+      mapRef.fitBounds(bounds);
+    }
     if (props.searched) {
       markerCallback();
     } else {
