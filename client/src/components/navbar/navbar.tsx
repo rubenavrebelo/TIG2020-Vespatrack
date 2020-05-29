@@ -135,6 +135,7 @@ export default function Navbar(props: Props) {
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
+            onClick={(e) => setPanTo(!enablePanTo)}
           >
             <MenuIcon />
           </IconButton>
