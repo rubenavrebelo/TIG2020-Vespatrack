@@ -272,7 +272,7 @@ export default function Maps(props: Props) {
         geoJSON.features.filter(
           (municipality: any) =>
             props.fitBoundsMunicip === municipality.properties.NAME_2
-        ).coordinates[0][0]
+        ).coordinates[0]
       );
     if (props.searched) {
       markerCallback();
