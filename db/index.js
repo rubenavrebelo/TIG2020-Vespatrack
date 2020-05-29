@@ -1,4 +1,3 @@
-const { Pool } = require("pg");
 const { Client } = require("pg");
 
 const client = new Client({
@@ -6,14 +5,6 @@ const client = new Client({
   ssl: {
     rejectUnauthorized: false,
   },
-});
-
-const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "TIG2020",
-  password: "3ds4life",
-  port: 5432,
 });
 
 client.connect();
