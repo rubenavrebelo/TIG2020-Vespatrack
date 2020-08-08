@@ -296,7 +296,7 @@ export default function Maps(props: Props) {
     <div style={{ marginTop: "10vh" }}>
       <LoadScript
         libraries={googleMapsLibraries}
-        googleMapsApiKey={process.env.GMAP_API_KEY}
+        googleMapsApiKey={process.env.REACT_APP_GMAP_API_KEY}
       >
         <GoogleMap
           mapContainerStyle={containerStyle}
