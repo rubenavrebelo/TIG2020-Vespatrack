@@ -3,7 +3,7 @@ const fs = require("fs");
 
 module.exports = {
   automaticImport: () => {
-    var json = JSON.parse(fs.readFileSync("./public/base.json", "utf8"));
+    var json = JSON.parse(fs.readFileSync("./client/public/base.json", "utf8"));
     json.ninhos.map((nest) => {
       const query = {
         text: `INSERT INTO public.ninhos (colony, destroyed, state_nest, past_states ${
@@ -35,7 +35,6 @@ module.exports = {
         values: Object.values(viewing),
       };
       db.insert(queryViewing);
-      console.log(queryViewing);
     });
   },
 };

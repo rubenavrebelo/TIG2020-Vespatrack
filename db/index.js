@@ -1,4 +1,3 @@
-const { Pool } = require("pg");
 const { Client } = require("pg");
 
 const client = new Client({
@@ -8,21 +7,13 @@ const client = new Client({
   },
 });
 
-const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "TIG2020",
-  password: "3ds4life",
-  port: 5432,
-});
-
-// client.connect();
+client.connect();
 
 module.exports = {
-  query: (text, params) => pool.query(text, params),
-  insert: (query) => pool.query(query),
+  query: (text, params) => client.query(text, params),
+  insert: (query) => client.query(query),
   insertWithReturn: (query, callback, type) =>
-    pool.query(query, function (err, result) {
+    client.query(query, function (err, result) {
       if (err) {
         callback(err);
       } else {

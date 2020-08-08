@@ -2,31 +2,32 @@ const express = require("express");
 const cors = require("cors");
 const db = require("./db");
 const dbimports = require("./automatic-import");
-const fs = require("fs");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const path = require("path");
+const { Storage } = require("@google-cloud/storage");
+
+const storage = new Storage({
+  keyFilename: path.join(__dirname, "/tig2020-275811-74fc34c94787.json"),
+});
 
 var app = express();
 
-var geojson = JSON.parse(fs.readFileSync("./public/concelhos.geojson", "utf8"));
-
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./public/uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 15 * 1024 * 1024, // no larger than 5mb, you can change as needed.
   },
 });
 
-const upload = multer({ storage: storage });
+const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
 app.use(cors());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", async (req, res) => {
+app.get("/avistamentos", async (req, res) => {
   const result = await db.query("SELECT * FROM avistamentos;");
   res.send(result.rows);
 });
@@ -49,9 +50,7 @@ app.get("/years", async (req, res) => {
 });
 
 app.get("/:id", async (req, res) => {
-  if (req.params.id === "concelhos") {
-    res.send(geojson);
-  } else if (req.params.id === "exterminadores") {
+  if (req.params.id === "exterminadores") {
     const result = await db.query("SELECT * FROM exterminador");
     res.send(result.rows);
   } else if (req.params.id === "municipalities_risk") {
@@ -93,6 +92,16 @@ function insertViewing(file, values, id, type) {
 }
 
 app.post("/add", upload.single("photo"), (req, res) => {
+  if (req.file) {
+    const blob = bucket.file("uploads/" + req.file.originalname);
+    const blobStream = blob.createWriteStream();
+
+    blobStream.on("error", (err) => {
+      console.log(err);
+    });
+
+    blobStream.end(req.file.buffer);
+  }
   const json = JSON.parse(req.body.data);
   const values = Object.values(json);
   let table;
@@ -120,7 +129,6 @@ app.post("/add", upload.single("photo"), (req, res) => {
   db.insertWithReturn(
     query,
     function (err, res) {
-      console.log(("id", res));
       insertViewing(req.file, values, res, json.type);
     },
     json.type
@@ -192,12 +200,25 @@ app.post("/update_state/:type/:id", (req, res) => {
 });
 
 app.put("/update_photo/:id", upload.single("photo"), (req, res) => {
-  const viewingQuery = {
-    text: `UPDATE public.avistamentos SET photo = ($1) WHERE id=($2)`,
-    values: [req.file.originalname, req.params.id],
-  };
-  db.query(viewingQuery);
-  res.send({});
+  if (req.file) {
+    const blob = bucket.file("uploads/" + req.file.originalname);
+    const blobStream = blob.createWriteStream();
+
+    blobStream.on("error", (err) => {
+      console.log(err);
+    });
+
+    blobStream.on("finish", () => {
+      const viewingQuery = {
+        text: `UPDATE public.avistamentos SET photo = ($1) WHERE id=($2)`,
+        values: [req.file.originalname, req.params.id],
+      };
+      db.query(viewingQuery);
+      res.send({});
+    });
+
+    blobStream.end(req.file.buffer);
+  }
 });
 
 app.post("/filter", async (req, res) => {
@@ -249,7 +270,7 @@ app.post("/filter", async (req, res) => {
   res.send(result.rows);
 });
 
-app.listen("8080", async () => {
+app.listen(process.env.PORT || "8080", async () => {
   const result = await db.query("SELECT * FROM avistamentos");
   if (result.rows.length === 0) {
     dbimports.automaticImport();
